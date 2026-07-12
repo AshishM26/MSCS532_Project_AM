@@ -3,6 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Python-generated files and local environments
+__pycache__/
+*.py[cod]
+.venv/
+.coverage
+.pytest_cache/
+
 # User-specific files
 *.rsuser
 *.suo
