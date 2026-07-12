@@ -101,10 +101,38 @@ def demonstrate_cycle_handling() -> None:
         print(f"Invalid example handled safely: {error}")
 
 
+def demonstrate_priority_ordering() -> None:
+    """Show urgency ordering and deterministic equal-priority behavior."""
+    queue = DeploymentPriorityQueue()
+    queue.enqueue("frontend-service", 3)
+    queue.enqueue("database-service", 2)
+    queue.enqueue("backend-api", 2)
+    queue.enqueue("network-foundation", 1)
+
+    print("Standalone priority queue order:")
+    while not queue.is_empty():
+        print(f"  {queue.dequeue()}")
+    print("  Equal-priority services retained insertion order: database then backend.")
+
+
 def main() -> None:
     """Run the complete Phase 1 demonstration."""
     registry, graph = build_example()
     print(f"Registered {len(registry.list_services())} generic services.")
+    print(f"Metadata lookup: {registry.get_service('database-service')}")
+    registry.update_status("database-service", "validated")
+    updated = registry.get_service("database-service")
+    status = updated["status"] if updated else None
+    print(f"Status update: database-service -> {status}")
+    registry.update_status("database-service", "pending")
+    print(
+        "backend-api prerequisites: "
+        f"{graph.get_prerequisites('backend-api')}"
+    )
+    print(
+        "network-foundation dependents: "
+        f"{graph.get_dependents('network-foundation')}"
+    )
     print(f"Valid graph contains a cycle: {graph.has_cycle()}")
     print("Topological deployment order:")
     print("  " + " -> ".join(graph.topological_order()))
@@ -112,6 +140,8 @@ def main() -> None:
     selected = schedule_eligible_tasks(registry, graph)
     print("Priority-aware valid order:")
     print("  " + " -> ".join(selected))
+    print()
+    demonstrate_priority_ordering()
     print()
     demonstrate_cycle_handling()
 

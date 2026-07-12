@@ -11,19 +11,26 @@ dependencies. A database, for example, must be available before an API that uses
 it. At the same time, multiple services may be eligible for deployment, so the
 platform needs a predictable way to select the most important task.
 
-This project is a generic educational model of that problem. It contains no
+This project is a generic model of that problem. It contains no
 employer-specific systems, proprietary applications, or internal architecture.
 
 Repository URL: <https://github.com/AshishM26/MSCS532_Project_AM>
 
 ## Architecture and data structure rationale
 
+The three structures separate three scheduling questions: the graph determines
+**deployment readiness**, the registry stores **deployment state**, and the
+priority queue determines **deployment urgency** among services that are ready.
+This separation is the central design insight of the Phase 1 model.
+
 - `DeploymentGraph` uses a directed adjacency list. An edge from `A` to `B`
   means that A is a prerequisite of B. Adjacency lists use `O(V + E)` space and
   are efficient for the sparse dependency graphs common in service platforms.
 - `ServiceRegistry` uses Python dictionaries (hash tables) for direct access to
   service metadata. Values are deep-copied at the class boundary to prevent
-  callers from mutating stored records unintentionally.
+  callers from mutating stored records unintentionally. Dictionary access is
+  `O(1)` on average but can degrade to `O(n)` in the theoretical worst case
+  under severe hash collisions.
 - `DeploymentPriorityQueue` uses `heapq`, a binary min-heap. Priorities range
   from 1 (critical) to 4 (low), so the smallest value is selected first. An
   insertion counter makes equal-priority processing deterministic.
@@ -55,7 +62,8 @@ degree, `n` the number of records/tasks, and `m` the total nested metadata size.
 MSCS532_Project_AM/
 ├── README.md
 ├── docs/
-│   └── phase1_design.md
+│   ├── phase1_design.md
+│   └── phase1_report_outline.md
 ├── examples/
 │   └── phase1_demo.py
 ├── src/
@@ -100,22 +108,27 @@ analysis. The implementation is deliberately in-memory and single-process.
 
 ### Phase 2 - proof of concept
 
-Phase 2 can integrate the structures behind a small command-line or REST
-interface, add persistence/serialization, model deployment completion and
-failure states, expand edge-case testing, and document measured test results
-and implementation challenges.
+Phase 2 can integrate the structures into a readiness engine, add
+persistence/serialization, model deployment completion and failure states,
+support dynamic priority changes, expand edge-case testing, and document
+measured test results and implementation challenges.
 
 ### Phase 3 - optimization and scaling
 
 Phase 3 can generate large synthetic dependency graphs, benchmark time and
 memory, compare topological-sorting strategies, profile bottlenecks, add bulk
-operations, evaluate concurrency controls, and report before/after performance
-with tables and graphs. These optimizations should be driven by measurements
-rather than added prematurely.
+operations, cache prerequisite results, evaluate graph database storage and
+concurrency controls, and report before/after performance with tables and
+graphs. Possible long-term research includes CI/CD and Kubernetes integration,
+cloud API integration, risk scoring, and AI-assisted deployment analysis.
+These directions are not implemented in Phase 1; optimizations should be driven
+by measurements rather than added prematurely.
 
 ## Known boundaries
 
-This educational foundation does not execute real deployments, persist data,
+This Phase 1 implementation does not execute real deployments, persist data,
 coordinate multiple processes, retry failed tasks, or provide authentication.
 See [the Phase 1 design](docs/phase1_design.md) for detailed rationale,
-pseudocode, limitations, and future optimization opportunities.
+pseudocode, limitations, and future optimization opportunities. The
+[Phase 1 report outline](docs/phase1_report_outline.md) maps this work to the
+four-page report deliverable.
