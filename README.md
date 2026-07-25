@@ -1,87 +1,158 @@
 # Cloud-Native Deployment Dependency and Priority Scheduling System
 
-**Student:** Ashish Mahajan<br>
-**Course:** MSCS 532 - Algorithms and Data Structures<br>
-**Assignment:** Developing and Optimizing Data Structures for Real-World Applications Using Python
+**Student:** Ashish Mahajan (005048542)<br>
+**Course:** MSCS 532-B01 - Algorithms and Data Structures<br>
+**Project:** Developing and Optimizing Data Structures for Real-World
+Applications Using Python
 
-## Application context
+Repository: <https://github.com/AshishM26/MSCS532_Project_AM>
 
-Cloud-native platforms often need to deploy services in an order constrained by
-dependencies. A database, for example, must be available before an API that uses
-it. At the same time, multiple services may be eligible for deployment, so the
-platform needs a predictable way to select the most important task.
+## Project context
 
-This project is a generic model of that problem. It contains no
-employer-specific systems, proprietary applications, or internal architecture.
+The project models generic cloud-resource dependencies and priority-aware
+scheduling. It contains only synthetic data and does not include proprietary
+systems, credentials, cloud APIs, or deployment commands.
 
-Repository URL: <https://github.com/AshishM26/MSCS532_Project_AM>
+The architecture separates three responsibilities:
 
-## Architecture and data structure rationale
+- `DeploymentGraph` determines **readiness** from prerequisite relationships.
+- `ServiceRegistry` stores resource metadata and execution **state**.
+- `DeploymentPriorityQueue` determines **urgency** among ready resources.
+- `DeploymentReadinessEngine` coordinates those structures without duplicating
+  their internal storage.
 
-The three structures separate three scheduling questions: the graph determines
-**deployment readiness**, the registry stores **deployment state**, and the
-priority queue determines **deployment urgency** among services that are ready.
-This separation is the central design insight of the Phase 1 model.
+## Phase 1 - foundational structures
 
-- `DeploymentGraph` uses a directed adjacency list. An edge from `A` to `B`
-  means that A is a prerequisite of B. Adjacency lists use `O(V + E)` space and
-  are efficient for the sparse dependency graphs common in service platforms.
-- `ServiceRegistry` uses Python dictionaries (hash tables) for direct access to
-  service metadata. Values are deep-copied at the class boundary to prevent
-  callers from mutating stored records unintentionally. Dictionary access is
-  `O(1)` on average but can degrade to `O(n)` in the theoretical worst case
-  under severe hash collisions.
-- `DeploymentPriorityQueue` uses `heapq`, a binary min-heap. Priorities range
-  from 1 (critical) to 4 (low), so the smallest value is selected first. An
-  insertion counter makes equal-priority processing deterministic.
+Phase 1 implemented:
 
-The graph automatically registers either endpoint of a new dependency. Adding
-an existing edge raises `DuplicateDependencyError`; asking for a topological
-order when a cycle exists raises `DependencyCycleError`.
+- forward and reverse adjacency lists;
+- Kahn cycle detection and deterministic topological ordering;
+- dictionary-based metadata registration, lookup, update, and removal;
+- safe metadata copies;
+- a stable `heapq` priority queue;
+- a generic seven-service demonstration; and
+- focused unit tests and design documentation.
 
-## Expected complexity
+Run the original demonstration:
 
-| Operation | Expected time | Extra/structure space |
-|---|---:|---:|
-| Add graph service | `O(1)` average | `O(1)` |
-| Add dependency | `O(1)` average | `O(1)` |
-| List direct neighbors | `O(d)` | `O(d)` returned copy |
-| Cycle detection | `O(V + E)` | `O(V)` |
-| Topological ordering | `O(V + E)` | `O(V)` |
-| Registry lookup/update/remove | `O(1)` average | record-dependent copy |
-| Registry listing | `O(n + m)` | `O(n + m)` returned copies |
-| Queue enqueue/dequeue | `O(log n)` | `O(1)` per entry |
-| Queue peek/size/empty check | `O(1)` | `O(1)` |
+```bash
+python3 examples/phase1_demo.py
+```
 
-Here, `V` is the number of services, `E` the dependencies, `d` a node's direct
-degree, `n` the number of records/tasks, and `m` the total nested metadata size.
+Phase 1 documentation:
+
+- [Phase 1 design](docs/phase1_design.md)
+- [Phase 1 report outline](docs/phase1_report_outline.md)
+
+## Phase 2 - proof of concept
+
+Phase 2 extends the existing foundation with:
+
+- strict cloud-resource and dependency CSV loading;
+- graph edge and resource deletion;
+- an integrated readiness engine;
+- derived ready, waiting, blocked, active, deployed, and failed states;
+- controlled execution-state transitions;
+- selection of only ready resources;
+- current-priority selection with deterministic ties;
+- intentional failure, blocked dependents, retry, and recovery;
+- priority updates before selection;
+- coordinated graph and registry deletion;
+- expanded unit and integration tests; and
+- reproducible trace CSV and summary JSON output.
+
+Run the Phase 2 proof of concept:
+
+```bash
+python3 examples/phase2_poc_demo.py
+```
+
+The committed run loads 10 resources and 9 dependencies. It begins with
+`network-core` and `notification-topic` eligible, intentionally fails
+`secrets-store` once, displays `backend-api` as blocked, deploys independent
+work, updates `backup-policy` from priority 4 to 1, retries the failed resource,
+and ultimately deploys all 10 resources.
+
+The valid topological order is:
+
+```text
+network-core -> notification-topic -> identity-boundary -> database-cluster
+-> monitoring-agent -> secrets-store -> backup-policy
+-> observability-dashboard -> backend-api -> frontend-service
+```
+
+The priority-aware successful deployment order is:
+
+```text
+network-core -> identity-boundary -> database-cluster -> backup-policy
+-> notification-topic -> monitoring-agent -> observability-dashboard
+-> secrets-store -> backend-api -> frontend-service
+```
+
+Phase 2 documentation:
+
+- [Phase 2 design](docs/phase2_design.md)
+- [Phase 2 report draft](docs/phase2_report_draft.md)
+
+## Complexity summary
+
+| Operation | Expected time |
+|---|---:|
+| Registry search/update | `O(1)` average* |
+| Graph resource registration | `O(1)` average |
+| Dependency insertion and cycle validation | `O(V + E)` |
+| One-resource readiness | `O(p)` |
+| Eligible-resource scan | `O(V + E)` |
+| Temporary ready-heap construction | `O(r log r)` |
+| Selection after heap construction | `O(log r)` |
+| Topological ordering | `O(V + E)` |
+| Graph resource removal | `O(in-degree + out-degree)` |
+
+`V` is resources, `E` dependencies, `p` direct prerequisites, and `r` ready
+resources. `*` Metadata-copy cost depends on record size. The temporary heap is
+rebuilt for each selection; this is a correctness-first Phase 2 trade-off, not
+an optimized claim.
 
 ## Repository structure
 
 ```text
 MSCS532_Project_AM/
 ├── README.md
+├── requirements.txt
+├── data/
+│   ├── phase2_cloud_resources.csv
+│   └── phase2_dependencies.csv
 ├── docs/
 │   ├── phase1_design.md
-│   └── phase1_report_outline.md
+│   ├── phase1_report_outline.md
+│   ├── phase2_design.md
+│   └── phase2_report_draft.md
 ├── examples/
-│   └── phase1_demo.py
+│   ├── phase1_demo.py
+│   └── phase2_poc_demo.py
+├── results/
+│   ├── phase2_execution_trace.csv
+│   └── phase2_summary.json
 ├── src/
 │   ├── __init__.py
+│   ├── cloud_resource_loader.py
 │   ├── deployment_graph.py
 │   ├── deployment_priority_queue.py
+│   ├── deployment_readiness_engine.py
 │   └── service_registry.py
-├── tests/
-│   ├── test_deployment_graph.py
-│   ├── test_deployment_priority_queue.py
-│   └── test_service_registry.py
-└── requirements.txt
+└── tests/
+    ├── test_cloud_resource_loader.py
+    ├── test_deployment_graph.py
+    ├── test_deployment_priority_queue.py
+    ├── test_deployment_readiness_engine.py
+    ├── test_phase2_integration.py
+    └── test_service_registry.py
 ```
 
-## Setup and execution
+## Setup and testing
 
-Python 3.10 or later is recommended. The project has no third-party runtime
-dependencies.
+Python 3.11 or later is recommended. The project uses only the Python standard
+library.
 
 ```bash
 git clone https://github.com/AshishM26/MSCS532_Project_AM.git
@@ -89,46 +160,38 @@ cd MSCS532_Project_AM
 python3 -m venv .venv
 source .venv/bin/activate
 python3 examples/phase1_demo.py
-```
-
-Run all tests from the repository root:
-
-```bash
+python3 examples/phase2_poc_demo.py
 python3 -m unittest discover -s tests -v
 ```
 
-## Project scope
+The verified Phase 2 suite contains **50 passing tests**. The tests focus on
+correctness and integration; the short local runtime is not a performance
+benchmark.
 
-### Phase 1 - design and foundation
+## Generated results
 
-Phase 1 defines the application context and implements the three foundational
-data structures. It includes validation, cycle detection, deterministic
-scheduling, a runnable demonstration, unit tests, pseudocode, and complexity
-analysis. The implementation is deliberately in-memory and single-process.
+Running the Phase 2 demo deterministically rewrites:
 
-### Phase 2 - proof of concept
-
-Phase 2 can integrate the structures into a readiness engine, add
-persistence/serialization, model deployment completion and failure states,
-support dynamic priority changes, expand edge-case testing, and document
-measured test results and implementation challenges.
-
-### Phase 3 - optimization and scaling
-
-Phase 3 can generate large synthetic dependency graphs, benchmark time and
-memory, compare topological-sorting strategies, profile bottlenecks, add bulk
-operations, cache prerequisite results, evaluate graph database storage and
-concurrency controls, and report before/after performance with tables and
-graphs. Possible long-term research includes CI/CD and Kubernetes integration,
-cloud API integration, risk scoring, and AI-assisted deployment analysis.
-These directions are not implemented in Phase 1; optimizations should be driven
-by measurements rather than added prematurely.
+- [phase2_execution_trace.csv](results/phase2_execution_trace.csv): 35
+  state-selection and transition events.
+- [phase2_summary.json](results/phase2_summary.json): input counts, initial
+  eligibility, topological and deployment orders, failure/retry counts, priority
+  updates, final state counts, and the blocked example.
 
 ## Known boundaries
 
-This Phase 1 implementation does not execute real deployments, persist data,
-coordinate multiple processes, retry failed tasks, or provide authentication.
-See [the Phase 1 design](docs/phase1_design.md) for detailed rationale,
-pseudocode, limitations, and future optimization opportunities. The
-[Phase 1 report outline](docs/phase1_report_outline.md) maps this work to the
-four-page report deliverable.
+- State is in memory and single-process.
+- CSV files provide reproducibility but not transactions.
+- The demo models one explicit failure rather than probabilistic failures.
+- Ready resources are rescanned and the heap is rebuilt on every selection.
+- No concurrency, resource capacity, deadline, authentication, or deployment
+  execution is included.
+- Structural deletion has no approval or audit-history layer.
+
+## Phase 3 direction
+
+Phase 3 should benchmark progressively larger sparse and dense synthetic graphs
+before changing the implementation. Candidate experiments include incremental
+cycle detection, cached in-degree/readiness values, lazy heap invalidation, bulk
+loading, compact metadata, and batched result writing. Performance and memory
+results should be compared with this committed Phase 2 baseline.
