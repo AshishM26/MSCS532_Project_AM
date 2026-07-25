@@ -1,5 +1,6 @@
 """Core data structures for deployment dependency scheduling."""
 
+from .cloud_resource_loader import load_engine_from_csv
 from .deployment_graph import (
     DependencyCycleError,
     DeploymentGraph,
@@ -22,4 +23,5 @@ __all__ = [
     "ReadinessResult",
     "ReadinessState",
     "ServiceRegistry",
+    "load_engine_from_csv",
 ]

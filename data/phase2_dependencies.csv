@@ -1,0 +1,10 @@
+prerequisite,dependent
+network-core,identity-boundary
+network-core,database-cluster
+network-core,monitoring-agent
+identity-boundary,secrets-store
+secrets-store,backend-api
+database-cluster,backend-api
+database-cluster,backup-policy
+backend-api,frontend-service
+monitoring-agent,observability-dashboard

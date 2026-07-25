@@ -1,0 +1,11 @@
+service_id,resource_type,environment,version,status,owner,priority,region,criticality
+network-core,network,staging,1.0.0,pending,platform,1,generic-region-1,critical
+identity-boundary,identity,staging,1.1.0,pending,security,2,generic-region-1,high
+secrets-store,security,staging,2.0.0,pending,security,1,generic-region-1,critical
+database-cluster,database,staging,15.0,pending,data,2,generic-region-1,high
+backend-api,application,staging,3.2.0,pending,application,2,generic-region-1,high
+frontend-service,application,staging,4.0.0,pending,application,3,generic-region-1,normal
+monitoring-agent,observability,staging,1.8.0,pending,operations,3,generic-region-1,normal
+observability-dashboard,observability,staging,2.4.0,pending,operations,4,generic-region-1,low
+backup-policy,backup,staging,1.0.0,pending,data,4,generic-region-1,normal
+notification-topic,messaging,staging,1.0.0,pending,operations,2,generic-region-1,normal
