@@ -1,0 +1,36 @@
+step,service_id,priority,action,previous_status,new_status,readiness_before,outcome,details
+1,network-core,1,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+2,network-core,1,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+3,network-core,1,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+4,identity-boundary,2,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+5,identity-boundary,2,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+6,identity-boundary,2,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+7,secrets-store,1,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+8,secrets-store,1,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+9,secrets-store,1,failed,in_progress,failed,in_progress,intentional_failure,Synthetic one-time failure used to demonstrate recovery.
+10,database-cluster,2,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+11,database-cluster,2,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+12,database-cluster,2,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+13,backup-policy,1,priority_updated,pending,pending,ready,success,Priority changed from 4 to 1 before selection.
+14,backup-policy,1,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+15,backup-policy,1,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+16,backup-policy,1,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+17,notification-topic,2,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+18,notification-topic,2,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+19,notification-topic,2,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+20,monitoring-agent,3,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+21,monitoring-agent,3,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+22,monitoring-agent,3,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+23,observability-dashboard,4,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+24,observability-dashboard,4,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+25,observability-dashboard,4,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+26,secrets-store,1,retried,failed,pending,failed,success,Failed resource returned to pending for another attempt.
+27,secrets-store,1,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+28,secrets-store,1,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+29,secrets-store,1,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+30,backend-api,2,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+31,backend-api,2,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+32,backend-api,2,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.
+33,frontend-service,3,selected,pending,pending,ready,selected,Highest-priority eligible resource selected.
+34,frontend-service,3,started,pending,in_progress,ready,success,Valid pending-to-in_progress transition.
+35,frontend-service,3,deployed,in_progress,deployed,in_progress,success,Valid in_progress-to-deployed transition.

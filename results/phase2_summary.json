@@ -1,0 +1,58 @@
+{
+  "all_deployed": true,
+  "blocked_example": {
+    "failed_prerequisites": [
+      "secrets-store"
+    ],
+    "incomplete_prerequisites": [
+      "secrets-store",
+      "database-cluster"
+    ],
+    "service_id": "backend-api",
+    "state": "blocked"
+  },
+  "dependency_count": 9,
+  "deployment_order": [
+    "network-core",
+    "identity-boundary",
+    "database-cluster",
+    "backup-policy",
+    "notification-topic",
+    "monitoring-agent",
+    "observability-dashboard",
+    "secrets-store",
+    "backend-api",
+    "frontend-service"
+  ],
+  "failure_count": 1,
+  "final_status_counts": {
+    "deployed": 10
+  },
+  "initial_eligible_resources": [
+    "network-core",
+    "notification-topic"
+  ],
+  "priority_updates": [
+    {
+      "new_priority": 1,
+      "previous_priority": 4,
+      "service_id": "backup-policy"
+    }
+  ],
+  "resource_count": 10,
+  "retry_count": 1,
+  "test_command": "python3 -m unittest discover -s tests -v",
+  "topological_order": [
+    "network-core",
+    "notification-topic",
+    "identity-boundary",
+    "database-cluster",
+    "monitoring-agent",
+    "secrets-store",
+    "backup-policy",
+    "observability-dashboard",
+    "backend-api",
+    "frontend-service"
+  ],
+  "trace_row_count": 35
+}
