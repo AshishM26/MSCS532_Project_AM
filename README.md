@@ -41,6 +41,7 @@ python3 examples/phase1_demo.py
 
 Phase 1 documentation:
 
+- [Phase 1 submitted report](docs/MSCS-532-B01_Project_1_AM.pdf)
 - [Phase 1 design](docs/phase1_design.md)
 - [Phase 1 report outline](docs/phase1_report_outline.md)
 
@@ -123,6 +124,7 @@ MSCS532_Project_AM/
 │   ├── phase2_cloud_resources.csv
 │   └── phase2_dependencies.csv
 ├── docs/
+│   ├── MSCS-532-B01_Project_1_AM.pdf
 │   ├── phase1_design.md
 │   ├── phase1_report_outline.md
 │   ├── phase2_design.md
