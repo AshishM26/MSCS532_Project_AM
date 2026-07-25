@@ -54,6 +54,46 @@ class DeploymentGraphTests(unittest.TestCase):
         self.assertEqual(graph.get_dependents("unknown"), [])
         self.assertEqual(graph.get_prerequisites("unknown"), [])
 
+    def test_remove_dependency_updates_both_adjacency_lists(self) -> None:
+        graph = DeploymentGraph()
+        graph.add_dependency("database", "api")
+
+        self.assertTrue(graph.remove_dependency("database", "api"))
+        self.assertEqual(graph.get_dependents("database"), [])
+        self.assertEqual(graph.get_prerequisites("api"), [])
+        self.assertIn("database", graph.topological_order())
+        self.assertIn("api", graph.topological_order())
+
+    def test_remove_missing_dependency_is_safe(self) -> None:
+        graph = DeploymentGraph()
+        graph.add_service("database")
+        graph.add_service("api")
+
+        self.assertFalse(graph.remove_dependency("database", "api"))
+
+    def test_remove_service_removes_incoming_and_outgoing_edges(self) -> None:
+        graph = DeploymentGraph()
+        graph.add_dependency("network", "database")
+        graph.add_dependency("database", "api")
+        graph.add_dependency("database", "backup")
+
+        self.assertTrue(graph.remove_service("database"))
+        self.assertEqual(graph.get_dependents("network"), [])
+        self.assertEqual(graph.get_prerequisites("api"), [])
+        self.assertEqual(graph.get_prerequisites("backup"), [])
+        self.assertEqual(
+            graph.topological_order(),
+            ["network", "api", "backup"],
+        )
+
+    def test_remove_isolated_or_unknown_service(self) -> None:
+        graph = DeploymentGraph()
+        graph.add_service("isolated")
+
+        self.assertTrue(graph.remove_service("isolated"))
+        self.assertFalse(graph.remove_service("isolated"))
+        self.assertEqual(graph.topological_order(), [])
+
 
 if __name__ == "__main__":
     unittest.main()

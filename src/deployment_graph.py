@@ -62,6 +62,39 @@ class DeploymentGraph:
         self._validate_name(service_name)
         return list(self._prerequisites.get(service_name, {}))
 
+    def remove_dependency(self, prerequisite: str, dependent: str) -> bool:
+        """Remove an edge while preserving both endpoint nodes.
+
+        Average-case time is O(1) because both adjacency structures use
+        dictionaries.
+        """
+        self._validate_name(prerequisite)
+        self._validate_name(dependent)
+        if dependent not in self._dependents.get(prerequisite, {}):
+            return False
+
+        del self._dependents[prerequisite][dependent]
+        del self._prerequisites[dependent][prerequisite]
+        return True
+
+    def remove_service(self, service_name: str) -> bool:
+        """Remove a service and every connected edge.
+
+        Time is O(in-degree + out-degree) for the removed service.
+        """
+        self._validate_name(service_name)
+        if service_name not in self._dependents:
+            return False
+
+        for prerequisite in tuple(self._prerequisites[service_name]):
+            del self._dependents[prerequisite][service_name]
+        for dependent in tuple(self._dependents[service_name]):
+            del self._prerequisites[dependent][service_name]
+
+        del self._dependents[service_name]
+        del self._prerequisites[service_name]
+        return True
+
     def _kahn_order(self) -> list[str]:
         """Return all nodes reachable by Kahn's algorithm in O(V + E) time."""
         in_degree = {
