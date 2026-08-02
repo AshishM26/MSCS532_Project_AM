@@ -1,0 +1,51 @@
+{
+  "all_deployed": true,
+  "all_parity_checks_passed": true,
+  "baseline_counters": {
+    "calculated_cycle_validations_during_load": 9,
+    "calculated_heap_rebuilds_during_scenario": 11,
+    "resources_processed": 10
+  },
+  "dataset": {
+    "dependency_count": 9,
+    "resource_count": 10
+  },
+  "deployment_order": [
+    "network-core",
+    "identity-boundary",
+    "database-cluster",
+    "backup-policy",
+    "notification-topic",
+    "monitoring-agent",
+    "observability-dashboard",
+    "secrets-store",
+    "backend-api",
+    "frontend-service"
+  ],
+  "failure_count_per_engine": 1,
+  "optimized_counters": {
+    "dependent_updates": 11,
+    "eligible_full_scans": 3,
+    "full_cycle_validations": 1,
+    "heap_pops": 11,
+    "heap_pushes": 12,
+    "heap_rebuilds": 0,
+    "index_rebuilds": 1,
+    "maximum_heap_size": 4,
+    "prerequisite_status_checks": 9,
+    "readiness_requests": 23,
+    "resources_processed": 10,
+    "stale_heap_pops": 0
+  },
+  "parity_checks": {
+    "deployment_order": true,
+    "failure_and_retry": true,
+    "final_summary": true,
+    "first_selection": true,
+    "initial_eligible_resources": true,
+    "initial_summary": true
+  },
+  "performance_claim": "The small demo validates behavior only; benchmark artifacts provide the performance evidence.",
+  "priority_update_count_per_engine": 1,
+  "retry_count_per_engine": 1
+}

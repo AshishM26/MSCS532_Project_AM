@@ -1,0 +1,137 @@
+{
+  "all_cases_passed": true,
+  "cases": [
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 4999,
+      "deployment_order_hash": "8ceddc6903622af88cd9fb5805acdc4775c9acd7bb19b07888d656e223235ee2",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 1,
+      "peak_memory_bytes": 9503008,
+      "profile": "chain",
+      "resource_count": 5000,
+      "runtime_seconds": 0.594770584,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 9999,
+      "deployment_order_hash": "aebafaa28f1e323fb07b084fd77ca1eb234f86be8d88061cb244c3b6201a748d",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 1,
+      "peak_memory_bytes": 19013224,
+      "profile": "chain",
+      "resource_count": 10000,
+      "runtime_seconds": 1.384801166,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 24999,
+      "deployment_order_hash": "d7ff9d1efd301598082a899389066332fca88e65903a0d3c9218321d5ab68f68",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 1,
+      "peak_memory_bytes": 52099648,
+      "profile": "chain",
+      "resource_count": 25000,
+      "runtime_seconds": 4.939772208,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 9918,
+      "deployment_order_hash": "e0abfb3e202cab4fdc79709a527c6e565194195bee3a74f3793ea2c3715af08d",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 70,
+      "peak_memory_bytes": 9402824,
+      "profile": "layered_sparse",
+      "resource_count": 5000,
+      "runtime_seconds": 0.73021725,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 19770,
+      "deployment_order_hash": "158540b04882205f536e1ca89919c5024e36a2e2c73dda1cc7b23c3d52eb5bf0",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 102,
+      "peak_memory_bytes": 18832096,
+      "profile": "layered_sparse",
+      "resource_count": 10000,
+      "runtime_seconds": 1.684438625,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 49549,
+      "deployment_order_hash": "dcb79176b0e58e0c7aed32c555bc36c0f0b5045bd0c4464b815b1f04fd9b59bd",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 158,
+      "peak_memory_bytes": 51688728,
+      "profile": "layered_sparse",
+      "resource_count": 25000,
+      "runtime_seconds": 5.817780417,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 0,
+      "deployment_order_hash": "9902a5a61bf6044d3dc78d59aee806b478d4a3cda964e958c5a41bcbd8a6b185",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 5000,
+      "peak_memory_bytes": 8365932,
+      "profile": "wide_independent",
+      "resource_count": 5000,
+      "runtime_seconds": 0.495972167,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 0,
+      "deployment_order_hash": "b85e2c1b695316bf9f42e83ca9736ad9cc7f56cde48612690404d1b441ddd03f",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 10000,
+      "peak_memory_bytes": 16081580,
+      "profile": "wide_independent",
+      "resource_count": 10000,
+      "runtime_seconds": 1.193408583,
+      "stale_heap_pops": 0
+    },
+    {
+      "all_deployed": true,
+      "correctness_passed": true,
+      "dependency_count": 0,
+      "deployment_order_hash": "e11de0069f761239b936b1bf568eba04f82e5daca7765402327892d17f4323dc",
+      "index_rebuilds": 1,
+      "maximum_heap_size": 25000,
+      "peak_memory_bytes": 45354860,
+      "profile": "wide_independent",
+      "resource_count": 25000,
+      "runtime_seconds": 4.519727834,
+      "stale_heap_pops": 0
+    }
+  ],
+  "failures": [],
+  "graph_profiles": [
+    "chain",
+    "layered_sparse",
+    "wide_independent"
+  ],
+  "measurement": "optimized engine construction and complete scheduling",
+  "memory_definition": "maximum traced Python allocation per case",
+  "platform": "Darwin 25.5.0 (arm64)",
+  "python_version": "3.11.1",
+  "tested_sizes": [
+    5000,
+    10000,
+    25000
+  ]
+}
