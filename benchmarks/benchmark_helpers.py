@@ -202,8 +202,8 @@ def create_runtime_chart(
     """Plot baseline and optimized schedule runtime by graph profile."""
     plt = _pyplot()
     profiles = ("chain", "layered_sparse", "layered_dense", "wide_independent")
-    figure, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True)
-    for axis, profile in zip(axes.flat, profiles):
+    figure, axes = plt.subplots(2, 2, figsize=(13, 9), sharex=True)
+    for index, (axis, profile) in enumerate(zip(axes.flat, profiles)):
         for engine in ("baseline", "optimized"):
             selected = sorted(
                 (
@@ -220,12 +220,14 @@ def create_runtime_chart(
                 label=engine,
             )
         axis.set_title(profile.replace("_", " ").title())
-        axis.set_xlabel("Resources")
-        axis.set_ylabel("Median seconds")
+        if index >= 2:
+            axis.set_xlabel("Resources")
+        axis.set_ylabel("Median seconds (log scale)")
+        axis.set_yscale("log")
         axis.grid(alpha=0.25)
         axis.legend()
     figure.suptitle("Schedule-All Runtime: Baseline vs Optimized")
-    figure.tight_layout()
+    figure.tight_layout(rect=(0, 0, 1, 0.95), w_pad=4.0, h_pad=3.0)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=160)
     plt.close(figure)
@@ -238,8 +240,8 @@ def create_memory_chart(
     """Plot peak traced schedule allocation by graph profile."""
     plt = _pyplot()
     profiles = ("chain", "layered_sparse", "layered_dense", "wide_independent")
-    figure, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True)
-    for axis, profile in zip(axes.flat, profiles):
+    figure, axes = plt.subplots(2, 2, figsize=(13, 9), sharex=True)
+    for index, (axis, profile) in enumerate(zip(axes.flat, profiles)):
         for engine in ("baseline", "optimized"):
             selected = sorted(
                 (
@@ -257,12 +259,13 @@ def create_memory_chart(
                 label=engine,
             )
         axis.set_title(profile.replace("_", " ").title())
-        axis.set_xlabel("Resources")
+        if index >= 2:
+            axis.set_xlabel("Resources")
         axis.set_ylabel("Peak traced MiB")
         axis.grid(alpha=0.25)
         axis.legend()
     figure.suptitle("Schedule-All Peak Python Allocation")
-    figure.tight_layout()
+    figure.tight_layout(rect=(0, 0, 1, 0.95), w_pad=4.0, h_pad=3.0)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=160)
     plt.close(figure)
